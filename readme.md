@@ -14,9 +14,8 @@ ordinary Gregorian date without knowing a Nepali calendar was involved.
 
 - No dependencies, no build tools.
 - Any modern browser (uses standard DOM APIs only).
-- Two files, loaded via plain `<link>` / `<script>` tags:
-  - `src/nepali-calendar.js`
-  - `src/nepali-calendar.css`
+- Loaded via CDN &mdash; one `<link>` and one `<script>` tag, nothing to
+  download or host yourself (see Quick start below).
 - Supported date range: **BS 2000&ndash;2090** (approx. AD 1943‑04‑14 to
   2034‑04‑13). Verified with a day-by-day round-trip test across the full
   range (33,238 days, zero mismatches).
@@ -32,14 +31,14 @@ nepali-calendar-js/
 └── README.md
 ```
 
-## Quick start
+## Quick start (CDN)
 
-1. Copy the `src/` folder next to your HTML page.
-2. Add the two tags and one `<input>`:
+Since the repo is public on GitHub, [jsDelivr](https://www.jsdelivr.com/)
+mirrors it automatically &mdash; no npm, no download, no hosting of your own.
 
 ```html
-<link rel="stylesheet" href="src/nepali-calendar.css">
-<script src="src/nepali-calendar.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/sudam-shrestha/nepali-calender@main/src/nepali-calendar.css">
+<script src="https://cdn.jsdelivr.net/gh/sudam-shrestha/nepali-calender@main/src/nepali-calendar.js"></script>
 
 <input type="text" id="dob" name="dob">
 
@@ -56,8 +55,20 @@ nepali-calendar-js/
 </script>
 ```
 
-3. Open `index.html` in a browser to see it working end to end, including
-   what gets submitted (visible Nepali value + hidden AD value).
+Open `index.html` in a browser to see it working end to end, including what
+gets submitted (visible Nepali value + hidden AD value).
+
+**Pinning a version:** `@main` always serves whatever is on the `main`
+branch, which is fine for now but can change under you. Once you cut a
+release tag (e.g. `v1.0.0`), swap `@main` for `@v1.0.0` in production sites
+so the CDN URL never changes behavior unexpectedly. After any push, jsDelivr
+can take a few minutes to pick up the change &mdash; force it sooner by
+visiting `https://purge.jsdelivr.net/gh/sudam-shrestha/nepali-calender@main/src/nepali-calendar.js`.
+
+**Self-hosting instead:** the `src/nepali-calendar.js` and `.css` files have
+zero dependencies, so you can still just copy them next to your HTML and
+point `<link>`/`<script>` at the local path if you'd rather not rely on a
+third-party CDN.
 
 ## Behavior
 
