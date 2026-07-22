@@ -95,17 +95,51 @@ third-party CDN.
 | `hiddenInputSelector` | &mdash; | Reuse an existing input instead of auto-creating one |
 | `onSelect` | &mdash; | `({ bs, ad, adFormatted, bsFormatted }) => void` |
 
-## Conversion helpers (no UI)
+## Date conversion (no UI)
 
-For places you just need BS ⟷ AD conversion without the picker widget:
+For places you just need BS ⟷ AD conversion without the picker widget &mdash;
+the same file exposes these directly. Supported range: **BS 2000&ndash;2090**
+(≈ AD 1943‑04‑14 to 2034‑04‑13); calling these outside that range throws an
+`Error`.
 
 ```js
-NepaliCalendar.adToBs(new Date());          // { year, month, day } in BS
-NepaliCalendar.bsToAd(2082, 4, 15);          // returns a JS Date in AD
-NepaliCalendar.formatBs({ year: 2082, month: 4, day: 15 }, 'ne');
-NepaliCalendar.toNepaliDigits(2082);         // "२०८२"
-NepaliCalendar.MIN_YEAR;                     // 2000
-NepaliCalendar.MAX_YEAR;                     // 2090
+// AD date -> BS
+NepaliCalendar.adToBs(new Date());
+// { year: 2083, month: 4, day: 4 }
+
+// BS date -> AD
+const ad = NepaliCalendar.bsToAd(2082, 4, 15); // JS Date
+NepaliCalendar.formatAd(ad);                   // "2025-07-30"
+
+// Display formatting
+const bs = { year: 2082, month: 4, day: 15 };
+NepaliCalendar.formatBs(bs, 'ne'); // "२०८२ श्रावण १५"
+NepaliCalendar.formatBs(bs, 'en'); // "2082-04-15 (Shrawan)"
+
+// Just the Nepali numerals
+NepaliCalendar.toNepaliDigits(2082); // "२०८२"
+
+// Range constants, useful for validating input before converting
+NepaliCalendar.MIN_YEAR; // 2000
+NepaliCalendar.MAX_YEAR; // 2090
+
+// Out-of-range dates throw, so validate or wrap in try/catch
+try {
+  NepaliCalendar.bsToAd(1990, 1, 1);
+} catch (e) {
+  console.error(e.message); // "NepaliCalendar: year 1990 is outside supported range 2000-2090"
+}
+```
+
+**Common use case &mdash; show "today" in BS somewhere on the page:**
+
+```html
+<span id="today-bs"></span>
+<script>
+  document.getElementById('today-bs').textContent =
+    NepaliCalendar.formatBs(NepaliCalendar.adToBs(new Date()), 'ne');
+  // renders: २०८३ श्रावण ४
+</script>
 ```
 
 ## Data source
